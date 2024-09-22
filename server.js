@@ -46,14 +46,35 @@ const shoes = [
 ];
 
 app.get('/shoes', (req, res) => {
+    const minPrice = req.query.minprice;
+    const maxPrice = req.query.maxprice;
     const type = req.query.type;
+
+    let shoesByMinPrice = [];
+    shoesByMinPrice = shoes.filter((shoe) => {
+        return shoe.price >= minPrice;
+    });
+
+    let shoesByMaxPrice = [];
+    shoesByMaxPrice = shoes.filter((shoe) => {
+        return shoe.price <= maxPrice;
+    });
+
+    let shoesByType = [];
+    shoesByType = shoes.filter((shoe) => {
+        return shoe.type === type;
+    });
+
+    if (minPrice) {
+        res.send(shoesByMinPrice);
+    } else if (maxPrice) {
+        res.send(shoesByMaxPrice);
+    } else if (type) {
+        res.send(shoesByType);
+    } else {
+        res.send(shoes);
+    }
 });
-
-
-
-
-
-
 
 app.listen(3000, () => {
     console.log(`Server is running at http://localhost:3000`);
